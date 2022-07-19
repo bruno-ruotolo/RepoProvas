@@ -5,7 +5,7 @@ import { AppError, errorStatusCodes, isAppError } from "../utils/errorUtils.js";
 
 export async function handleErrors(error: Error | AppError, req: Request, res: Response, next: NextFunction) {
 
-  console.log(chalk.redBright(`Something Went Wrong: `), chalk.red.bold(error));
+  console.log(chalk.redBright(`Something Went Wrong: `), error);
 
   if (isAppError(error)) {
     const statusCode = errorStatusCodes(error.type);

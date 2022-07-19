@@ -7,3 +7,4 @@ export type TeacherCreateData = Omit<Teacher, "id">;
 export type TeacherDisciplineCreateData = Omit<TeacherDiscipline, "id">;
 export type TestCreateData = Omit<Test, "id">;
 export type UserCreateData = Omit<User, "id">;
+export type RegisterCreateData = Omit<User, "id"> & { confirmPassword: string };

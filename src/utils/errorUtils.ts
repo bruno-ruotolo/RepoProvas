@@ -14,6 +14,7 @@ export function errorStatusCodes(type: ErrorTypes) {
     ["conflict", 409],
     ["not_found", 404],
     ["unauthorized", 401],
+    ["unprocessable_entity", 422],
     ["bad_request", 400]
   ]);
 
@@ -36,4 +37,8 @@ export function unauthorizedError(message?: string) {
 
 export function badRequestError(message?: string) {
   return { type: "bad_request", message };
+};
+
+export function unprocessableEntityError(message?: string) {
+  return { type: "unprocessable_entity", message };
 };

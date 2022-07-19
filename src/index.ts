@@ -5,7 +5,7 @@ import chalk from "chalk";
 import dotenv from "dotenv";
 dotenv.config();
 
-import router from "./services/index.js";
+import router from "./routers/index.js";
 import { handleErrors } from "./middlewares/handleErrorMiddleware.js";
 
 const app = express();
