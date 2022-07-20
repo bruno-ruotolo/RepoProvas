@@ -9,7 +9,7 @@ import { conflictError, unauthorizedError, unprocessableEntityError } from "../u
 export async function signUpService(userData: RegisterCreateData) {
   const { password, email, confirmPassword } = userData;
 
-  isPasswordsEqual(password, confirmPassword);
+  await isPasswordsEqual(password, confirmPassword);
   delete userData.confirmPassword;
   await isEmailConfliting(email);
   const passwordHash = await encryptPassword(password);
@@ -27,7 +27,7 @@ export async function signInService(userData: UserCreateData) {
   return token;
 };
 
-function isPasswordsEqual(password: string, confirmPassword: string) {
+async function isPasswordsEqual(password: string, confirmPassword: string) {
   if (password !== confirmPassword) throw unprocessableEntityError("Passwords are Diferents");
 };
 
