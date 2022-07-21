@@ -6,7 +6,7 @@ import { RegisterCreateData, UserCreateData } from "../interfaces/createDataInte
 import authRepository from "../repositories/authRepository.js";
 import { conflictError, unauthorizedError, unprocessableEntityError } from "../utils/errorUtils.js";
 
-export async function signUpService(userData: RegisterCreateData) {
+async function signUpService(userData: RegisterCreateData) {
   const { password, email, confirmPassword } = userData;
 
   isPasswordsEqual(password, confirmPassword);
@@ -17,7 +17,7 @@ export async function signUpService(userData: RegisterCreateData) {
   await authRepository.create({ ...userData, password: passwordHash });
 };
 
-export async function signInService(userData: UserCreateData) {
+async function signInService(userData: UserCreateData) {
   const { password, email } = userData;
 
   const user = await isEmailValid(email);
@@ -61,3 +61,10 @@ async function generateJWTToken(user: User) {
   const token = jwt.sign({ id, email }, JWT_SECRET_KEY, EXPIRATION_DATE);
   return token;
 };
+
+const authService = {
+  signUpService,
+  signInService
+};
+
+export default authService;
