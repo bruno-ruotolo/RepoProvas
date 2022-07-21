@@ -1,6 +1,6 @@
+import chalk from "chalk";
 import dotenv from "dotenv";
 dotenv.config();
-import chalk from "chalk";
 
 import app from "./app.js";
 

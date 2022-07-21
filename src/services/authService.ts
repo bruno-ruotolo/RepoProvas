@@ -9,7 +9,7 @@ import { conflictError, unauthorizedError, unprocessableEntityError } from "../u
 export async function signUpService(userData: RegisterCreateData) {
   const { password, email, confirmPassword } = userData;
 
-  await isPasswordsEqual(password, confirmPassword);
+  isPasswordsEqual(password, confirmPassword);
   delete userData.confirmPassword;
   await isEmailConfliting(email);
   const passwordHash = await encryptPassword(password);
