@@ -9,6 +9,7 @@ beforeEach(async () => {
   await prisma.$executeRaw`DELETE FROM users WHERE email = 'test@gmail.com'`;
 });
 
+//Auth Register
 describe("Auth Register Suite", () => {
   it("given a valid user body it should return 201", async () => {
     const register = authFactory.createBody();
@@ -43,6 +44,7 @@ describe("Auth Register Suite", () => {
   });
 });
 
+//Auth Login
 describe("Auth Login Suite", () => {
   it("given a valid credentials it should return 200", async () => {
     const register = authFactory.createBody();
@@ -82,6 +84,7 @@ afterAll(async () => {
   await prisma.$disconnect();
 });
 
+//Tests Creation
 describe("Tests Create Suite", () => {
   it("given a valid body it should return 201", async () => {
     const register = authFactory.createBody();
@@ -145,4 +148,116 @@ describe("Tests Create Suite", () => {
     expect(user).toBeUndefined;
     expect(status).toBe(401);
   });
+
+  it("given a invalid categoryId it should return 422", async () => {
+    const INVALID_ID = 100000000000;
+    const register = authFactory.createBody();
+    delete register.confirmPassword;
+    await authFactory.createUser(register);
+
+    const login = await supertest(app).post("/").send(register);
+    const token = login.body.token;
+
+    const test = testsFactory.createBody()
+
+    const result = await supertest(app)
+      .post("/tests/create")
+      .send({ ...test, categoryId: INVALID_ID })
+      .set("Authorization", `Bearer ${token}`)
+    const status = result.status;
+
+    const user = await prisma.test.findFirst({ where: { name: test.name, pdfUrl: test.pdfUrl } });
+
+    expect(user).toBeUndefined;
+    expect(status).toBe(422);
+  });
+
+  it("given a invalid teacherDisciplineId it should return 422", async () => {
+    const INVALID_ID = 100000000000;
+    const register = authFactory.createBody();
+    delete register.confirmPassword;
+    await authFactory.createUser(register);
+
+    const login = await supertest(app).post("/").send(register);
+    const token = login.body.token;
+
+    const test = testsFactory.createBody()
+
+    const result = await supertest(app)
+      .post("/tests/create")
+      .send({ ...test, teacherDisciplineId: INVALID_ID })
+      .set("Authorization", `Bearer ${token}`)
+    const status = result.status;
+
+    const user = await prisma.test.findFirst({ where: { name: test.name, pdfUrl: test.pdfUrl } });
+
+    expect(user).toBeUndefined;
+    expect(status).toBe(422);
+  });
+
+  //Test Get By Discipline 
+  it("given a valid header it should return 200 and the tests", async () => {
+    const register = authFactory.createBody();
+    delete register.confirmPassword;
+    await authFactory.createUser(register);
+
+    const login = await supertest(app).post("/").send(register);
+    const token = login.body.token;
+
+    const result = await supertest(app)
+      .get("/tests/disciplines")
+      .set("Authorization", `Bearer ${token}`)
+    const status = result.status;
+
+    expect(result).not.toBeNull;
+    expect(result).not.toBeUndefined;
+    expect(status).toBe(200);
+
+  });
+
+  it("given a invalid header it should return 401", async () => {
+    const register = authFactory.createBody();
+    delete register.confirmPassword;
+    await authFactory.createUser(register);
+
+    const result = await supertest(app).get("/tests/disciplines")
+    const status = result.status;
+
+    expect(result).toBeNull;
+    expect(status).toBe(401);
+  });
+
 });
+
+
+describe("Categories Tests Suite", () => {
+  it("given a valid header it should return 200 and all the categories", async () => {
+    const register = authFactory.createBody();
+    delete register.confirmPassword;
+    await authFactory.createUser(register);
+
+    const login = await supertest(app).post("/").send(register);
+    const token = login.body.token;
+
+    const result = await supertest(app)
+      .get("/tests/categories")
+      .set("Authorization", `Bearer ${token}`)
+    const status = result.status;
+
+    expect(result).not.toBeNull;
+    expect(result).not.toBeUndefined;
+    expect(status).toBe(200);
+  });
+
+  it("given a invalid header it should return 401", async () => {
+    const register = authFactory.createBody();
+    delete register.confirmPassword;
+    await authFactory.createUser(register);
+
+    const result = await supertest(app).get("/tests/categories")
+    const status = result.status;
+
+    expect(result).toBeNull;
+    expect(status).toBe(401);
+  });
+})
