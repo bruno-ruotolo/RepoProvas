@@ -9,7 +9,7 @@ beforeEach(async () => {
   await prisma.$executeRaw`DELETE FROM users WHERE email = 'test@gmail.com'`;
 });
 
-//Auth Register
+//AUTH REGISTER SUITE
 describe("Auth Register Suite", () => {
   it("given a valid user body it should return 201", async () => {
     const register = authFactory.createBody();
@@ -44,7 +44,7 @@ describe("Auth Register Suite", () => {
   });
 });
 
-//Auth Login
+//AUTH LOGIN SUITE
 describe("Auth Login Suite", () => {
   it("given a valid credentials it should return 200", async () => {
     const register = authFactory.createBody();
@@ -84,15 +84,10 @@ afterAll(async () => {
   await prisma.$disconnect();
 });
 
-//Tests Creation
+//TESTS CREATION SUITE
 describe("Tests Create Suite", () => {
   it("given a valid body it should return 201", async () => {
-    const register = authFactory.createBody();
-    delete register.confirmPassword;
-    await authFactory.createUser(register);
-
-    const login = await supertest(app).post("/").send(register);
-    const token = login.body.token;
+    const token = await authFactory.loginAndReturnToken();
 
     const test = testsFactory.createBody()
 
@@ -109,12 +104,7 @@ describe("Tests Create Suite", () => {
   });
 
   it("given a invalid body it should return 422", async () => {
-    const register = authFactory.createBody();
-    delete register.confirmPassword;
-    await authFactory.createUser(register);
-
-    const login = await supertest(app).post("/").send(register);
-    const token = login.body.token;
+    const token = await authFactory.loginAndReturnToken();
 
     const test = testsFactory.createBody()
     delete test.name;
@@ -132,10 +122,6 @@ describe("Tests Create Suite", () => {
   });
 
   it("given a invalid header token it should return 401", async () => {
-    const register = authFactory.createBody();
-    delete register.confirmPassword;
-    await authFactory.createUser(register);
-
     const test = testsFactory.createBody()
 
     const result = await supertest(app)
@@ -151,12 +137,7 @@ describe("Tests Create Suite", () => {
 
   it("given a invalid categoryId it should return 422", async () => {
     const INVALID_ID = 100000000000;
-    const register = authFactory.createBody();
-    delete register.confirmPassword;
-    await authFactory.createUser(register);
-
-    const login = await supertest(app).post("/").send(register);
-    const token = login.body.token;
+    const token = await authFactory.loginAndReturnToken();
 
     const test = testsFactory.createBody()
 
@@ -174,12 +155,7 @@ describe("Tests Create Suite", () => {
 
   it("given a invalid teacherDisciplineId it should return 422", async () => {
     const INVALID_ID = 100000000000;
-    const register = authFactory.createBody();
-    delete register.confirmPassword;
-    await authFactory.createUser(register);
-
-    const login = await supertest(app).post("/").send(register);
-    const token = login.body.token;
+    const token = await authFactory.loginAndReturnToken();
 
     const test = testsFactory.createBody()
 
@@ -194,15 +170,12 @@ describe("Tests Create Suite", () => {
     expect(user).toBeUndefined;
     expect(status).toBe(422);
   });
+});
 
-  //Test Get By Discipline 
+//TESTS GETS BY DISCIPLINES SUITE
+describe("Tests Gets By Disciplines Suite", () => {
   it("given a valid header it should return 200 and the tests", async () => {
-    const register = authFactory.createBody();
-    delete register.confirmPassword;
-    await authFactory.createUser(register);
-
-    const login = await supertest(app).post("/").send(register);
-    const token = login.body.token;
+    const token = await authFactory.loginAndReturnToken();
 
     const result = await supertest(app)
       .get("/tests/disciplines")
@@ -216,28 +189,43 @@ describe("Tests Create Suite", () => {
   });
 
   it("given a invalid header it should return 401", async () => {
-    const register = authFactory.createBody();
-    delete register.confirmPassword;
-    await authFactory.createUser(register);
-
     const result = await supertest(app).get("/tests/disciplines")
     const status = result.status;
 
     expect(result).toBeNull;
     expect(status).toBe(401);
   });
-
 });
 
+//TESTS GETS BY TEACHERS SUITE
+describe("Tests Gets By Teachers Suite", () => {
+  it("given a valid header it should return 200 and the tests", async () => {
+    const token = await authFactory.loginAndReturnToken();
 
+    const result = await supertest(app)
+      .get("/tests/teachers")
+      .set("Authorization", `Bearer ${token}`)
+    const status = result.status;
+
+    expect(result).not.toBeNull;
+    expect(result).not.toBeUndefined;
+    expect(status).toBe(200);
+
+  });
+
+  it("given a invalid header it should return 401", async () => {
+    const result = await supertest(app).get("/tests/disciplines")
+    const status = result.status;
+
+    expect(result).toBeNull;
+    expect(status).toBe(401);
+  });
+});
+
+//CATEGORIES SUITE
 describe("Categories Tests Suite", () => {
   it("given a valid header it should return 200 and all the categories", async () => {
-    const register = authFactory.createBody();
-    delete register.confirmPassword;
-    await authFactory.createUser(register);
-
-    const login = await supertest(app).post("/").send(register);
-    const token = login.body.token;
+    const token = await authFactory.loginAndReturnToken();
 
     const result = await supertest(app)
       .get("/tests/categories")
@@ -250,14 +238,10 @@ describe("Categories Tests Suite", () => {
   });
 
   it("given a invalid header it should return 401", async () => {
-    const register = authFactory.createBody();
-    delete register.confirmPassword;
-    await authFactory.createUser(register);
-
     const result = await supertest(app).get("/tests/categories")
     const status = result.status;
 
     expect(result).toBeNull;
     expect(status).toBe(401);
   });
-})
+});

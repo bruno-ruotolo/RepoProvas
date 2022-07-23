@@ -21,6 +21,12 @@ async function getTestsByDisciplines() {
   return tests;
 };
 
+async function getTestsByTeachers() {
+  const tests = await testsRepository.getTestsByTeachers();
+
+  return tests;
+};
+
 async function getAllCategories() {
   const categories = await testsRepository.getAllCategories();
 
@@ -30,7 +36,8 @@ async function getAllCategories() {
 const testsService = {
   createTest,
   getTestsByDisciplines,
-  getAllCategories
+  getAllCategories,
+  getTestsByTeachers
 };
 
 

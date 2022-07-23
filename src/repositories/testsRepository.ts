@@ -49,13 +49,47 @@ async function getTestsByDiscipline() {
   )
 };
 
+async function getTestsByTeachers() {
+  return await prisma.teacher.findMany(
+    {
+      include: {
+        teachersDisciplines: {
+          select: {
+            discipline: {
+              select: {
+                id: true,
+                name: true,
+                term: { select: { id: true, number: true } },
+              }
+            },
+            tests: {
+              select: {
+                id: true,
+                name: true,
+                pdfUrl: true,
+                category: {
+                  select: {
+                    id: true,
+                    name: true
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  )
+
+};
 
 const testsRepository = {
   create,
   getTeacherDisciplineById,
   getCategoryById,
   getAllCategories,
-  getTestsByDiscipline
+  getTestsByDiscipline,
+  getTestsByTeachers
 };
 
 export default testsRepository;

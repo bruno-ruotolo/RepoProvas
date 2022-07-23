@@ -17,6 +17,12 @@ export async function getTestsBySubjectsController(req: Request, res: Response) 
   return res.status(200).send(tests);
 };
 
+export async function getTestsByTeachersController(req: Request, res: Response) {
+  const tests = await testsService.getTestsByTeachers();
+
+  return res.status(200).send(tests);
+};
+
 export async function getAllCategoriesController(req: Request, res: Response) {
   const tests = await testsService.getAllCategories();
 
