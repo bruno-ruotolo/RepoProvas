@@ -7,9 +7,8 @@
 
 # About
 
-All of us at some time need to take a look at those old tests, either to review the subject or to learn it. 
-For this, this application was developed, to help everyone adding old tests of different subjects and teachers, quickly and practically.
-
+All of us, at some time, needed to take a look at those old tests, either to review the subjects or to learn it. 
+Keeping this in mind, this application was developed to help everyone adding old tests of different subjects and teachers, and to acesss it quickly and practically.
 
 ## Technologies
 These are the main tools, frameworks and languages that were used in this project:<br>
@@ -89,7 +88,7 @@ Here you can check the endpoints related to the project, as well as their respec
 ```
 ---
 
-### Websites Credentials Routes
+### Tests Routes
 
 #### Create Tests
 - POST _/tests/create
