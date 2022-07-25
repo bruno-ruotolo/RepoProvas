@@ -1,5 +1,5 @@
 import Joi from "joi";
-import { RegisterCreateData, UserCreateData } from "../interfaces/createDataInterface";
+import { RegisterCreateData, UserCreateData } from "../interfaces/createDataInterface.js";
 
 const registerSchema = Joi.object<RegisterCreateData>({
   email: Joi.string().email().required(),

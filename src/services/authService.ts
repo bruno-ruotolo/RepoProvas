@@ -6,10 +6,11 @@ import { RegisterCreateData, UserCreateData } from "../interfaces/createDataInte
 import authRepository from "../repositories/authRepository.js";
 import { conflictError, unauthorizedError, unprocessableEntityError } from "../utils/errorUtils.js";
 
+//SERVICES
 async function signUpService(userData: RegisterCreateData) {
   const { password, email, confirmPassword } = userData;
 
-  isPasswordsEqual(password, confirmPassword);
+  await isPasswordsEqual(password, confirmPassword);
   delete userData.confirmPassword;
   await isEmailConfliting(email);
   const passwordHash = await encryptPassword(password);
@@ -27,6 +28,7 @@ async function signInService(userData: UserCreateData) {
   return token;
 };
 
+//AUXILIARY FUNCTIONS
 async function isPasswordsEqual(password: string, confirmPassword: string) {
   if (password !== confirmPassword) throw unprocessableEntityError("Passwords are Diferents");
 };

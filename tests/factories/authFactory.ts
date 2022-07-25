@@ -5,13 +5,15 @@ import prisma from "../../src/config/db.js";
 import supertest from "supertest";
 import app from "../../src/app.js";
 
+const EMAIL = 'test@gmail.com'
+
 interface Register {
   email: string;
   password: string;
   confirmaPassword?: string
 }
 
-function createBody(email = "test@gmail.com", passwordLength = 10) {
+function createBody(email = EMAIL, passwordLength = 10) {
   const passwordRandom = faker.internet.password(passwordLength);
   return {
     email,
@@ -46,6 +48,5 @@ const authFactory = {
   createUser,
   loginAndReturnToken
 };
-
 
 export default authFactory;

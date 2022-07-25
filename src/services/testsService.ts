@@ -4,11 +4,11 @@ import { TestCreateData } from "../interfaces/createDataInterface.js";
 import testsRepository from "../repositories/testsRepository.js";
 import { unprocessableEntityError } from "../utils/errorUtils.js";
 
-
 //SERVICES
 async function createTest(testData: TestCreateData) {
   const category = await testsRepository.getCategoryById(testData.categoryId);
-  const teacherDiscipline = await testsRepository.getTeacherDisciplineById(testData.teacherDisciplineId);
+  const teacherDiscipline = await testsRepository
+    .getTeacherDisciplineById(testData.teacherDisciplineId);
 
   isCategoryOrTeacherDisciplineValid(category, teacherDiscipline)
 

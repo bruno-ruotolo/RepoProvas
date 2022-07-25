@@ -1,5 +1,5 @@
 import Joi from "joi";
-import { TestCreateData } from "../interfaces/createDataInterface";
+import { TestCreateData } from "../interfaces/createDataInterface.js";
 
 const testSchema = Joi.object<TestCreateData>({
   name: Joi.string().required(),

@@ -1,12 +1,15 @@
 import app from "../src/app.js";
 import prisma from "../src/config/db.js";
 import supertest from "supertest";
+
 import authFactory from "./factories/authFactory.js";
 import testsFactory from "./factories/testsFactory.js";
 
+const EMAIL = 'test@gmail.com'
+
 beforeEach(async () => {
   await prisma.$executeRaw`TRUNCATE TABLE tests`;
-  await prisma.$executeRaw`DELETE FROM users WHERE email = 'test@gmail.com'`;
+  await prisma.$executeRaw`DELETE FROM users WHERE email = ${EMAIL}`;
 });
 
 //AUTH REGISTER SUITE
@@ -23,7 +26,7 @@ describe("Auth Register Suite", () => {
   });
 
   it("given a invalid user body it should return 422", async () => {
-    const result = await supertest(app).post("/sign-up").send({ email: "test@gmail.com" });
+    const result = await supertest(app).post("/sign-up").send({ email: EMAIL });
     const status = result.status;
 
     expect(status).toEqual(422);
@@ -89,7 +92,7 @@ describe("Tests Create Suite", () => {
   it("given a valid body it should return 201", async () => {
     const token = await authFactory.loginAndReturnToken();
 
-    const test = testsFactory.createBody()
+    const test = testsFactory.createBody(1, 1);
 
     const result = await supertest(app)
       .post("/tests/create")
@@ -97,9 +100,9 @@ describe("Tests Create Suite", () => {
       .set("Authorization", `Bearer ${token}`)
     const status = result.status;
 
-    const user = await prisma.test.findFirst({ where: { name: test.name, pdfUrl: test.pdfUrl } });
+    const testResult = await prisma.test.findFirst({ where: { name: test.name, pdfUrl: test.pdfUrl } });
 
-    expect(user.name).toBe(test.name);
+    expect(testResult.name).toBe(test.name);
     expect(status).toBe(201);
   });
 
