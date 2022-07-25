@@ -71,7 +71,8 @@ Here you can check the endpoints related to the project, as well as their respec
 ```json
 {
   "email": "user@myemail.com",
-  "password": "mypassword" // >= 10 char
+  "password": "mypassword", // >= 10 char
+  "confirmPassword":"mypassword"
 }
 ```
 
@@ -90,8 +91,8 @@ Here you can check the endpoints related to the project, as well as their respec
 
 ### Websites Credentials Routes
 
-#### Create Credential
-- POST _/credentials_
+#### Create Tests
+- POST _/tests/create
 
 - Header
 ```json
@@ -103,98 +104,16 @@ Here you can check the endpoints related to the project, as well as their respec
 - Body
 ```json
 {
-    "title":"My Title",
-    "url":"https://www.myemail.com",
-    "username":"user",
-    "password": "mypassword"
+    "name":"My Test Name",
+    "pdfUrl": "https://www.free-scores.com/PDF/mozart-wolfgang-amadeus-turkish-march-662.pdf",
+    "categoryId": 1,
+    "teacherDisciplineId": 1
 }
 ```
 
 
-#### Get All My Credentials
-- GET _/credentials_
-
-- Header
-```json
-{
-    "Authorization" : "Bearer <token>"
-}
-``` 
-
-- Response
-```json
-[
-    {
-        "id": 0
-        "userId": 0,
-        "title":"My Title",
-        "url":"https://www.myemail.com",
-        "username":"user",
-        "password": "mypassword"
-        "createdAt": "2022-07-17T16:46:42.056Z"
-    }
-] {...}
-```
-
-#### Get Credential By ID
-- GET _/credentials/:id_
-
-- Header
-```json
-{
-    "Authorization" : "Bearer <token>"
-}
-``` 
-
-- Response
-```json
-{
-    "id": 0
-    "userId": 0,
-    "title":"My Title",
-    "url":"https://www.myemail.com",
-    "username":"user",
-    "password": "mypassword"
-    "createdAt": "2022-07-17T16:46:42.056Z"
-}
-```
-
-
-#### Delete Credential By ID
-- DELETE _/credentials/:id_
-
-- Header
-```json
-{
-    "Authorization" : "Bearer <token>"
-}
-``` 
-
----
-
-### Secure Notes Routes
-
-#### Create Secure Notes
-- POST _/secure-notes_
-
-- Header
-```json
-{
-    "Authorization" : "Bearer <token>"
-}
-``` 
-
-- Body
-```json
-{
-    "title":"My Title",
-    "note" : "My Note"
-}
-```
-
-
-#### Get All My Secure Notes
-- GET _/secure-notes_
+#### Get All Tests By Term and Disciplines
+- GET _/tests/disciplines_
 
 - Header
 ```json
@@ -207,77 +126,40 @@ Here you can check the endpoints related to the project, as well as their respec
 ```json
 [
   {
-    "id": 0,
-    "userId": 0,
-    "title": "My Title",
-    "note": "My Note",
-    "createdAt": "2022-07-17T16:47:19.507Z"
-  }
-] {...}
+    "id": 1,
+    "number": 1,
+    "disciplines": [
+      {
+        "id": 1,
+        "name": "Discipline's Name",
+        "teachersDisciplines": [
+          {
+            "id": 1,
+            "teacher": {
+              "id": 1,
+              "name": "Teacher's Name"
+            },
+            "tests": [
+              {
+                "id": 2,
+                "name": "Test's Name",
+                "pdfUrl": "https://www.free-scores.com/PDF/mozart-wolfgang-amadeus-turkish-march-662.pdf",
+                "category": {
+                  "id": 2,
+                  "name": "Category's Name"
+                }
+              }, {...}
+            ]
+          }, {...}
+        ]
+      }, {...}
+    ]
+  }, {...}
+]
 ```
 
-#### Get Secure Notes By ID
-- GET _/secure-notes/:id_
-
-- Header
-```json
-{
-    "Authorization" : "Bearer <token>"
-}
-``` 
-
-- Response
-```json
-{
-    "id": 0,
-    "userId": 0,
-    "title": "My Title",
-    "note": "My Note",
-    "createdAt": "2022-07-17T16:47:19.507Z"
-}
-```
-
-
-#### Delete Secure Notes By ID
-- DELETE _/secure-notes/:id_
-
-- Header
-```json
-{
-    "Authorization" : "Bearer <token>"
-}
-``` 
-
----
-
-### Cards Routes
-
-#### Create Cards
-- POST _/cards_
-
-- Header
-```json
-{
-    "Authorization" : "Bearer <token>"
-}
-``` 
-
-- Body
-```json
-{
-  "title":"My Title",
-  "number":"0000000000000000",
-  "name":"USER U USERS",
-  "cvv":"000",
-  "expirationDate":"12/22",
-  "password":"0000",
-  "isVirtual":true, //true or false
-  "type":"debit" //"credit", "debit", "both"
-}
-```
-
-#### Get All My Cards
-- GET _/cards_
+#### Get All Tests By Teachers
+- GET _/tests/teachers_
 
 - Header
 ```json
@@ -290,84 +172,38 @@ Here you can check the endpoints related to the project, as well as their respec
 ```json
 [
   {
-    "id": 0,
-    "userId": 0,
-    "title": "My Title",
-    "number": "0000000000000000",
-    "name": "USER U USERS",
-    "cvv": "000",
-    "expirationDate": "12/22",
-    "password": "0000",
-    "isVirtual": true,
-    "type": "debit",
-    "createdAt": "2022-07-17T16:47:19.507Z"
-  }
-] {...}
-```
-
-#### Get Card By ID
-- GET _/cards/:id_
-
-- Header
-```json
-{
-    "Authorization" : "Bearer <token>"
-}
-``` 
-
-- Response
-```json
-{
-    "id": 0,
-    "userId": 0,
-    "title": "My Title",
-    "number": "0000000000000000",
-    "name": "USER U USERS",
-    "cvv": "000",
-    "expirationDate": "12/22",
-    "password": "0000",
-    "isVirtual": true,
-    "type": "debit",
-    "createdAt": "2022-07-17T16:47:19.507Z"
-}
+    "id": 1,
+    "name": "Teacher's Name",
+    "teachersDisciplines": [
+      {
+        "discipline": {
+          "id": 1,
+          "name": "Discipline's Name",
+          "term": {
+            "id": 1,
+            "number": 1
+          }
+        },
+        "tests": [
+          {
+            "id": 2,
+            "name": "Test's Name",
+            "pdfUrl": "https://www.free-scores.com/PDF/mozart-wolfgang-amadeus-turkish-march-662.pdf",
+            "category": {
+              "id": 2,
+              "name": "Category's Name"
+            }
+          }, {...}
+        ]
+      }, {...}
+    ]
+  }, {...}
+]
 ```
 
 
-#### Delete Card By ID
-- DELETE _/cards/:id_
-
-- Header
-```json
-{
-    "Authorization" : "Bearer <token>"
-}
-``` 
-
----
-
-### WIFI Credentials Routes
-
-#### Create WIFI 
-- POST _/wifi_
-
-- Header
-```json
-{
-    "Authorization" : "Bearer <token>"
-}
-``` 
-
-- Body
-```json
-{
-  "title":"My Title",
-  "name":"USER WIFI",
-  "password":"000000",
-}
-```
-
-#### Get All My WIFIs
-- GET _/wifi_
+#### Get All Categories
+- GET _/tests/categories_
 
 - Header
 ```json
@@ -380,48 +216,11 @@ Here you can check the endpoints related to the project, as well as their respec
 ```json
 [
   {
-    "id": 0,
-    "userId": 0,
-    "title": "My Title",
-    "name":"USER WIFI",
-    "password":"000000",
-    "createdAt": "2022-07-17T16:47:19.507Z"
-  }
-] {...}
+    "id": 1,
+    "name": "Projeto"
+  }, {...}
+]
 ```
-
-#### Get WIFI By ID
-- GET _/wifi/:id_
-
-- Header
-```json
-{
-    "Authorization" : "Bearer <token>"
-}
-``` 
-
-- Response
-```json
-{
-    "id": 0,
-    "userId": 0,
-    "title": "My Title",
-    "name":"USER WIFI",
-    "password":"000000",
-    "createdAt": "2022-07-17T16:47:19.507Z"
-}
-```
-
-
-#### Delete WIFI By ID
-- DELETE _/wifi/:id_
-
-- Header
-```json
-{
-    "Authorization" : "Bearer <token>"
-}
-``` 
 
 ## Authors
 ### Bruno Ruotolo
