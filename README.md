@@ -56,6 +56,11 @@ npm prisma migrate dev
 
 If you want to use the deployed API access: https://repoprovas-ruotolo.herokuapp.com
 
+Run the Tests Locally using [Jest](https://jestjs.io): 
+```git
+npm test
+```
+
 # API Reference
 
 Here you can check the endpoints related to the project, as well as their respective characteristics. Have Fun 😄
